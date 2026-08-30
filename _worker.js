@@ -2,7 +2,7 @@
 import { connect } from 'cloudflare:sockets';
 
 let 我的VL密钥 = '7f484ae3-305f-40ba-97e6-611e47ec981b';
-let 反代IP = 'proxyip.hk.fxxk.dedyn.io'; // Qingdao için HK/JP tabanlı proxyIP
+let 反代IP = 'cdn.anycast.eu.org'; // yedek/varsayılan
 
 export default {
   async fetch(访问请求) {
@@ -19,13 +19,23 @@ export default {
       const 请求路径 = 请求URL.pathname;
       const 节点路径 = '/sub';
       if (请求路径 === 节点路径) {
+        const proxyIPler = [
+          'cdn.anycast.eu.org',
+          'edgetunnel.anycast.eu.org',
+          'cdn-all.xn--b6gac.eu.org',
+          'cdn.xn--b6gac.eu.org',
+          'cdn-b100.xn--b6gac.eu.org'
+        ];
+        const nodeLinkleri = proxyIPler.map((ip, i) =>
+          `vless://${我的VL密钥}@${部署域名}:443?encryption=none&security=tls&sni=${部署域名}&fp=random&type=ws&host=${部署域名}&path=pyip%3D${encodeURIComponent(ip)}#node${i + 1}-${ip}`
+        ).join('\n');
+
         return new Response(`部署成功！
 你的UUID: ${我的VL密钥}
 你的部署域名：${部署域名}
-你的反代ip：${反代IP}
 
-默认节点：
-vless://${我的VL密钥}@${部署域名}:443?encryption=none&security=tls&sni=${部署域名}&fp=random&type=ws&host=${部署域名}&path=pyip%3D${反代IP}#${部署域名}
+Otomatik seçim için 5 node:
+${nodeLinkleri}
 `, { status: 200, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
       } else {
         return new Response('部署成功，使用你的路径查看节点信息！', { status: 404, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
