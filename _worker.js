@@ -18,6 +18,30 @@ export default {
       const 部署域名 = 请求URL.hostname;
       const 请求路径 = 请求URL.pathname;
       const 节点路径 = '/sub';
+
+      if (请求路径 === '/hy2') {
+        return new Response(`{
+  "outbounds": [
+    {
+      "type": "hysteria2",
+      "tag": "Hysteria2-VPS",
+      "server": "108.174.57.226",
+      "server_port": 443,
+      "obfs": {
+        "type": "salamander",
+        "password": "QingdaoObfs2026"
+      },
+      "password": "8fliNkfGFDbK2rKzHmEYPzPz",
+      "tls": {
+        "enabled": true,
+        "server_name": "bing.com",
+        "insecure": true
+      }
+    }
+  ]
+}`, { status: 200, headers: { 'Content-Type': 'application/json; charset=utf-8' } });
+      }
+
       if (请求路径 === 节点路径) {
         const proxyIPler = [
           'cdn.anycast.eu.org',
@@ -37,9 +61,9 @@ export default {
 Otomatik seçim için 5 node:
 ${nodeLinkleri}
 `, { status: 200, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
-      } else {
-        return new Response('部署成功，使用你的路径查看节点信息！', { status: 404, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
       }
+
+      return new Response('部署成功，使用你的路径查看节点信息！', { status: 404, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
     }
   }
 };
