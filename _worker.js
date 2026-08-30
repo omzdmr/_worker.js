@@ -5,7 +5,7 @@
 //默认节点显示路径：https://部署域名/sub
 import { connect } from 'cloudflare:sockets';
 let 我的VL密钥 = '04c808e2-0b59-47b0-a54b-32fc7ef1c902';//UUID
-let 反代IP = 'proxyip.cmliussss.net'; //反代IP
+let 反代IP = 'proxyip.sg.fxxk.dedyn.io'; //反代IP
 export default {
   async fetch(访问请求) {
     if (访问请求.headers.get('Upgrade') === 'websocket') {
